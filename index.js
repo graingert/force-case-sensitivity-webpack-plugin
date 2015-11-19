@@ -9,6 +9,8 @@ var path = require('path');
 var fs = require('fs');
 var _ = require('lodash');
 
+var reDevServer = /dev\-server/
+
 function ForceCaseSensitivityPlugin() {
   //no-op
 }
@@ -16,6 +18,10 @@ function ForceCaseSensitivityPlugin() {
 ForceCaseSensitivityPlugin.prototype.apply = function(compiler) {
   compiler.plugin('normal-module-factory', function(nmf) {
     nmf.plugin('after-resolve', function(data, done) {
+      if (reDevServer.test(data.resource)) {
+        done(null, data);
+        return;
+      }
       var parentDir = path.dirname(data.resource);
       var resourceName = path.basename(data.resource);
       fs.readdir(parentDir, function(err, files) {

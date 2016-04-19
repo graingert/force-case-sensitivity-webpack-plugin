@@ -26,7 +26,7 @@ ForceCaseSensitivityPlugin.prototype.apply = function(compiler) {
         if (exists) {
           fs.readdir(parentDir, function(err, files) {
             if (err) {
-              done(err);
+              return done(err);
             }
             if (files.indexOf(resourceName) === -1) {
               var realName = _.find(files, function(filename) {
